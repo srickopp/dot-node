@@ -16,6 +16,9 @@ dotenv.config()
         },
       ],
       uri: `amqp://${process.env.RABBIT_USER}:${process.env.RABBIT_PASS}@${process.env.RABBIT_HOST}:${process.env.RABBIT_PORT}`,
+      connectionInitOptions: {
+        wait: true
+      }
     })
   ],
   controllers: [PostController],
