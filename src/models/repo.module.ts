@@ -1,5 +1,6 @@
 import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { PostComment } from "./entities/post-comment.entity";
 import { Posts } from "./entities/post.entity";
 import RepoService from "./repo.service";
 
@@ -7,7 +8,8 @@ import RepoService from "./repo.service";
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-        Posts
+        Posts,
+        PostComment
     ]),
   ],
   providers: [RepoService],

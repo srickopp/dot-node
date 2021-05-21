@@ -1,24 +1,33 @@
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PostComment } from "./post-comment.entity";
-@Entity({name: "posts"})
-export class Posts extends BaseEntity{
+import { Posts } from "./post.entity";
+
+@Entity({name: "posts_comments"})
+export class PostComment extends BaseEntity{
     @PrimaryColumn({
         type:'int'
     })
     id: number;
 
     @Column({
+        primary: true,
         type: 'int',
         nullable: false
     })
-    userId: number;
+    postId: number;
 
     @Column({
         length: 255,
         type: 'varchar',
         nullable: false
     })
-    title: string;
+    name: string;
+
+    @Column({
+        length: 100,
+        type: 'varchar',
+        nullable: false
+    })
+    email: string;
 
     @Column({
         type: 'text',
@@ -44,10 +53,9 @@ export class Posts extends BaseEntity{
     })
     deleted_at: Date;
 
-    @OneToMany(() => PostComment, postComment => postComment.post)
+    @ManyToOne(() => Posts, post => post.post_comments)
     @JoinColumn({
-        name: 'id'
+        name:'post_id'
     })
-    post_comments: PostComment[];
+    post: Posts;
 }
-
