@@ -8,9 +8,9 @@ export class PostController {
         private readonly postService: PostService
     ){}
 
-    @Get()
-    async fetchData(@Res() res: Response){
-        const get = await this.postService.getPosts();
+    @Get('/sync')
+    async sync(@Res() res: Response){
+        const get = await this.postService.syncPosts();
         return res.status(get.status).send({
             message: get.error_message,
             data: get.data

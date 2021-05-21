@@ -3,6 +3,7 @@ import { HttpModule, Module } from '@nestjs/common';import { RepoModule } from '
 import { PostController } from './post.controller';
 import PostService from './post.service';
 import * as dotenv from 'dotenv';
+import PostRabbitService from './post-rabbit.service';
 dotenv.config()
 
 @Module({
@@ -18,6 +19,6 @@ dotenv.config()
     })
   ],
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, PostRabbitService],
 })
 export class PostModule {}

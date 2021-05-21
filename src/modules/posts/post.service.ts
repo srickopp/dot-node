@@ -1,4 +1,4 @@
-import { AmqpConnection, RabbitRPC } from "@golevelup/nestjs-rabbitmq";
+import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
 import { HttpService, Injectable } from "@nestjs/common";
 import RepoService from "src/models/repo.service";
 import { ApiResponse } from "./dto/post.dto";
@@ -12,14 +12,14 @@ export default class PostService {
         private readonly amqpConnection: AmqpConnection,
     ){}
 
-    async getPosts(){
+    async syncPosts(){
         try {
             const get = await this.httpService.get(
                 process.env.API_URL + '/posts'
             ).toPromise();
 
             for (let index = 0; index < 2; index++) {
-                this.publishToRabbit(get.data[0])
+                this.publishToRabbit(get.data[0], 'sync')
             }
 
             return {
@@ -35,18 +35,33 @@ export default class PostService {
         }
     }
 
-    @RabbitRPC({
-        exchange: 'dot-test',
-        routingKey: 'post',
-        queue: 'post-queue',
-    })
-    async createPost(rabbit_data){
-        console.log(rabbit_data)
-        return true;
+
+    async getPosts(){
+
     }
 
-    async publishToRabbit(data: ApiResponse){
-        let publish = await this.amqpConnection.publish('dot-test', 'post', {
+    async getPost(){
+
+    }
+    
+    async createPost(data){
+        
+    }
+
+    async patchPost(data){
+        
+    }
+
+    async deletePosts(data){
+        
+    }
+
+    async updatePost(data){
+        
+    }
+
+    async publishToRabbit(data: ApiResponse, routing_key){
+        let publish = await this.amqpConnection.publish('dot-test', routing_key, {
             data
         });
         return true
