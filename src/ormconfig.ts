@@ -4,14 +4,14 @@ dotenv.config();
 
 const dir = process.env.NODE_ENV == 'migration' ? 'src' : 'dist';
 export default <TypeOrmModuleOptions>   {
-    type:"postgres",
+    type: process.env.DATABASE_CONNECTION,
     host: process.env.DATABASE_HOST,
     port: Number(process.env.DATABASE_PORT),
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE,
-    logger: "advanced-console",
-    logging:"all",
+    // logger: "advanced-console",
+    // logging:"all",
     entities: [`${dir}/**/*.entity.{js,ts}`],
     migrations: [`${dir}/models/migrations/*.{js,ts}`],
     seeds: [`${dir}/models/migrations/seeders/*.seed.{js,ts}`],
@@ -23,5 +23,5 @@ export default <TypeOrmModuleOptions>   {
         factoriesDir: `${dir}/models/migrations/factories`,
     },
     synchronize: false,
-    migrationsRun: true
+    // migrationsRun: true
 };
