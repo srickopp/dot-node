@@ -14,17 +14,37 @@ export default class PostRabbitService {
     @RabbitRPC({
         exchange: 'dot-test',
         routingKey: 'sync',
-        queue: 'post-queue',
+        queue: 'post-sync',
     })
     async syncData(rabbit_data){
-        console.log(rabbit_data)
+        /** Sync data */
+        const data: ApiResponse = rabbit_data.data;
+        const find = await this.repoService.postRepo.count({
+            id: data.id
+        });
+
+        if(find){
+            // Update data
+            await this.repoService.postRepo.update({
+                id: data.id
+            },{
+                userId: data.userId,
+                body: data.body,
+                title: data.title
+            });
+        }else {
+            // Create data
+            await this.repoService.postRepo.save({
+                ...data
+            });
+        }
         return true;
     }
 
     @RabbitRPC({
         exchange: 'dot-test',
         routingKey: 'create',
-        queue: 'post-queue',
+        queue: 'post-create',
     })
     async createData(rabbit_data){
         console.log(rabbit_data)
@@ -34,7 +54,7 @@ export default class PostRabbitService {
     @RabbitRPC({
         exchange: 'dot-test',
         routingKey: 'update',
-        queue: 'post-queue',
+        queue: 'post-update',
     })
     async updatedData(rabbit_data){
         console.log(rabbit_data)
@@ -44,7 +64,7 @@ export default class PostRabbitService {
     @RabbitRPC({
         exchange: 'dot-test',
         routingKey: 'patch',
-        queue: 'post-queue',
+        queue: 'post-patch',
     })
     async patchData(rabbit_data){
         console.log(rabbit_data)
@@ -54,7 +74,7 @@ export default class PostRabbitService {
     @RabbitRPC({
         exchange: 'dot-test',
         routingKey: 'delete',
-        queue: 'post-queue',
+        queue: 'post-delete',
     })
     async deleteData(rabbit_data){
         console.log(rabbit_data)

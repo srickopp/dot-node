@@ -16,10 +16,12 @@ export default class PostService {
         try {
             const get = await this.httpService.get(
                 process.env.API_URL + '/posts'
-            ).toPromise();
+            ).toPromise();  
 
-            for (let index = 0; index < 2; index++) {
-                this.publishToRabbit(get.data[0], 'sync')
+            if(get.data && get.data.length > 0){
+                for await(let api_response of get.data){
+                    this.publishToRabbit(api_response, 'sync')
+                }
             }
 
             return {
