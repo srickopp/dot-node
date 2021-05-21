@@ -215,7 +215,6 @@ export default class PostRabbitService {
             const patchedData = await this.repoService.postRepo.findOne({id});
             console.log(patchedData)
             return true;
-            return true;
         } catch (error) {
             console.log('--- FAILED UPDATE SERVER ERROR || Invalid ID ---')
             return true;
